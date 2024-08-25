@@ -1,0 +1,32 @@
+﻿@model  PROYECTO3.Models.ViewModels.TablaViewModel
+@{
+    ViewBag.Title = "Nnuevo";
+}
+
+<h2>ViewBag.Title</h2>
+
+
+    @using (Html.BeginForm("Nuevo", "Tabla", FormMethod.Post)) {
+        <div class="row">
+            <div class="col-md-12">
+
+                @Html.LabelFor(d => d.nombre)
+                @Html.TextBoxFor(d => d.nombre, "", new { @class = "form-control" })
+
+                @Html.ValidationMessagefor(d => nom)
+
+
+                @Html.LabelFor(d => d.correo)
+                @Html.TextBoxFor(d => d.correo, "", new { @class = "form-control" })
+                @Html.LabelFor(d => d.fecha_nacimiento) <br />
+                @Html.EditorFor(d => d.fecha_nacimiento, "", new { @class = "form-control" })
+
+                <br />
+                <div style="text-align: right; ">
+                    <input value="Guardar" class="btn" btn-primary type="submit">
+
+                </div>
+            </div>
+
+        </div>
+    }
