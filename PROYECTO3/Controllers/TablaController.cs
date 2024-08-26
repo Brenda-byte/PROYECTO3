@@ -4,18 +4,27 @@ using System.Linq;
 using System.Web.Mvc;
 using PROYECTO3.Models;
 using PROYECTO3.Models.ViewModels;
+using Serilog; // Asegúrate de agregar el paquete y configurarlo
 
 namespace PROYECTO3.Controllers
 {
     public class TablaController : Controller
     {
+        // Asegúrate de inyectar el contexto si usas DI
+        private readonly CRUDEntities4 _db;
+
+        public TablaController()
+        {
+            _db = new CRUDEntities4(); // O usa la inyección de dependencias aquí
+        }
+
         // GET: Tabla
         public ActionResult Index()
         {
             List<ListTablaViewModel> lst;
-            using (CRUDEntities4 db = new CRUDEntities4())
+            using (_db)
             {
-                lst = (from d in db.Tablas
+                lst = (from d in _db.Tablas
                        select new ListTablaViewModel
                        {
                            id = d.id,
@@ -41,7 +50,7 @@ namespace PROYECTO3.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    using (CRUDEntities4 db = new CRUDEntities4())
+                    using (_db)
                     {
                         var oTabla = new Tabla
                         {
@@ -50,10 +59,10 @@ namespace PROYECTO3.Controllers
                             nombre = model.nombre
                         };
 
-                        db.Tablas.Add(oTabla);
-                        db.SaveChanges();
+                        _db.Tablas.Add(oTabla);
+                        _db.SaveChanges();
                     }
-                    return RedirectToAction("Index"); // Redirige a la acción Index
+                    return RedirectToAction("Tabla"); // Redirige a la acción Index
                 }
 
                 // Si el modelo no es válido, regresa la vista con el modelo para mostrar los errores
@@ -61,11 +70,14 @@ namespace PROYECTO3.Controllers
             }
             catch (Exception ex)
             {
-                // Puedes registrar el error usando un sistema de logging, o mostrar un mensaje de error genérico
-                // Por ejemplo, puedes usar el siguiente para fines de desarrollo:
-                // ViewBag.ErrorMessage = ex.Message;
-                // return View(model);
-                throw; // Mejor lanzar la excepción para no ocultar errores en producción
+                // Registrar el error
+                Log.Error(ex, "Error al guardar el nuevo registro.");
+
+                // Mostrar un mensaje genérico al usuario
+                ViewBag.ErrorMessage = "Ocurrió un error inesperado. Por favor, inténtelo de nuevo más tarde.";
+
+                // Devolver la vista con el modelo
+                return View(model);
             }
         }
     }

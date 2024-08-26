@@ -19,7 +19,7 @@ namespace PROYECTO3.Models.ViewModels
         public string correo { get; set; }
         [Required]
         [DataType(DataType.Date)]
-        [Display(Name = "Fecha de naciemiento")]
+        [Display(Name = "Fecha de nacimiento")]
         public DateTime fecha_nacimiento { get; set; }
     }
 }

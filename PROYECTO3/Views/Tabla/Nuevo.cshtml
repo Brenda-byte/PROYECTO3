@@ -9,21 +9,30 @@
     @using (Html.BeginForm("Nuevo", "Tabla", FormMethod.Post)) {
         <div class="row">
             <div class="col-md-12">
-
-                @Html.LabelFor(d => d.nombre)
-                @Html.TextBoxFor(d => d.nombre, "", new { @class = "form-control" })
-                @Html.ValidationMessageFor(d => d.nombre,null,new { @class="red" })
-                @Html.LabelFor(d => d.correo)
-                @Html.TextBoxFor(d => d.correo, "", new { @class = "form-control" })
-                @Html.LabelFor(d => d.fecha_nacimiento) <br />
-                @Html.EditorFor(d => d.fecha_nacimiento, "", new { @class = "form-control" })
-
-                <br />
-                <div style="text-align: right; ">
-                    <input value="Guardar" class="btn" btn-primary type="submit">
-
+                <div>
+                    @Html.LabelFor(d => d.nombre)
+                    @Html.TextBoxFor(d => d.nombre, "", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(d => d.nombre, null, new { @class = "red" })
                 </div>
-            </div>
 
-        </div>
+                <div>
+                    @Html.LabelFor(d => d.correo)
+                    @Html.TextBoxFor(d => d.correo, "", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(d => d.correo, null, new { @class = "red" })
+                </div>
+
+                <div>
+                    @Html.LabelFor(d => d.fecha_nacimiento) <br />
+                    @Html.EditorFor(d => d.fecha_nacimiento, "", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(d => d.fecha_nacimiento, null, new { @class = "red" })
+                </div>
+
+                    <br />
+                    <div style="text-align: right; ">
+                        <input value="Guardar" class="btn" btn-primary type="submit">
+
+                    </div>
+                </div>
+
+            </div>
     }

@@ -1,6 +1,4 @@
-﻿.red {
-    color: @darkred;
-}
+﻿
     /* Set padding to keep content from hitting the edges */
     .body-content {
     margin-top: 15px;
@@ -21,3 +19,8 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.red {
+    color: red;
+}
+
