@@ -1,5 +1,8 @@
-﻿/* Set padding to keep content from hitting the edges */
-.body-content {
+﻿.red {
+    color: @darkred;
+}
+    /* Set padding to keep content from hitting the edges */
+    .body-content {
     margin-top: 15px;
     padding-left: 15px;
     padding-right: 15px;

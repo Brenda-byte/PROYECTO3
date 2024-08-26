@@ -12,10 +12,7 @@
 
                 @Html.LabelFor(d => d.nombre)
                 @Html.TextBoxFor(d => d.nombre, "", new { @class = "form-control" })
-
-                /   @Html.ValidationMessagefor(d => nom)
-
-
+                @Html.ValidationMessageFor(d => d.nombre,null,new { @class="red" })
                 @Html.LabelFor(d => d.correo)
                 @Html.TextBoxFor(d => d.correo, "", new { @class = "form-control" })
                 @Html.LabelFor(d => d.fecha_nacimiento) <br />
