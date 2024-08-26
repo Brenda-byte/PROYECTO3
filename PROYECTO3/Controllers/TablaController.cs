@@ -10,9 +10,9 @@ namespace PROYECTO3.Controllers
 {
     public class TablaController : Controller
     {
-        // Asegúrate de inyectar el contexto si usas DI
         private readonly CRUDEntities4 _db;
 
+        // Constructor
         public TablaController()
         {
             _db = new CRUDEntities4(); // O usa la inyección de dependencias aquí
@@ -55,14 +55,14 @@ namespace PROYECTO3.Controllers
                         var oTabla = new Tabla
                         {
                             correo = model.correo,
-                            fecha_nacimiento = model.fecha_nacimiento,
+                            fecha_nacimiento = model.Fecha_nacimiento, // Asegúrate de que el nombre del campo coincide
                             nombre = model.nombre
                         };
 
                         _db.Tablas.Add(oTabla);
                         _db.SaveChanges();
                     }
-                    return RedirectToAction("Tabla"); // Redirige a la acción Index
+                    return RedirectToAction("Index"); // Redirige a la acción Index
                 }
 
                 // Si el modelo no es válido, regresa la vista con el modelo para mostrar los errores
@@ -72,6 +72,72 @@ namespace PROYECTO3.Controllers
             {
                 // Registrar el error
                 Log.Error(ex, "Error al guardar el nuevo registro.");
+
+                // Mostrar un mensaje genérico al usuario
+                ViewBag.ErrorMessage = "Ocurrió un error inesperado. Por favor, inténtelo de nuevo más tarde.";
+
+                // Devolver la vista con el modelo
+                return View(model);
+            }
+        }
+
+        // GET: Tabla/Editar/5
+        public ActionResult Editar(int id)
+        {
+            TablaViewModel model;
+            using (_db)
+            {
+                var oTabla = _db.Tablas.Find(id);
+                if (oTabla == null)
+                {
+                    return HttpNotFound("Registro no encontrado.");
+                }
+
+                model = new TablaViewModel
+                {
+                    nombre = oTabla.nombre,
+                    correo = oTabla.correo,
+                    Fecha_nacimiento = oTabla.fecha_nacimiento, // Asegúrate de que el nombre del campo coincide
+                    id = oTabla.id
+                };
+            }
+            return View(model);
+        }
+
+        // POST: Tabla/Editar
+        [HttpPost]
+        public ActionResult Editar(TablaViewModel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    using (_db)
+                    {
+                        var oTabla = _db.Tablas.Find(model.id); // Buscar el registro existente
+                        if (oTabla == null)
+                        {
+                            return HttpNotFound("Registro no encontrado.");
+                        }
+
+                        // Actualizar las propiedades del registro existente
+                        oTabla.correo = model.correo;
+                        oTabla.fecha_nacimiento = model.Fecha_nacimiento; // Asegúrate de que el nombre del campo coincide
+                        oTabla.nombre = model.nombre;
+
+                        _db.Entry(oTabla).State = System.Data.Entity.EntityState.Modified;
+                        _db.SaveChanges();
+                    }
+                    return RedirectToAction("Index"); // Redirige a la acción Index
+                }
+
+                // Si el modelo no es válido, regresa la vista con el modelo para mostrar los errores
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                // Registrar el error
+                Log.Error(ex, "Error al guardar el registro.");
 
                 // Mostrar un mensaje genérico al usuario
                 ViewBag.ErrorMessage = "Ocurrió un error inesperado. Por favor, inténtelo de nuevo más tarde.";
