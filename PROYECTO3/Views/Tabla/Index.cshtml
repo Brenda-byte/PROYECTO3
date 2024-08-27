@@ -13,9 +13,10 @@
                 <table class="table">
 
                     <tr>
-                        <th># </th>
-                        <th>Nombre </th>
-                        <th>Correo </th>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Fecha de nacimiento</th>
                     </tr>
 
                     @foreach (var oElemento in Model)
@@ -27,7 +28,7 @@
                             <td>
                                 <a class="btn btn-default" href="~/Tabla/Editar/@oElemento.id">Editar</a>
                                 <a class="btn btn-danger" href="~/Tabla/Eliminar/@oElemento.id">Eliminar</a>
-
+                                
 
                             </td>
 

@@ -179,6 +179,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>BD.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Carro.cs">
+      <DependentUpon>BD.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Tabla.cs">
       <DependentUpon>BD.tt</DependentUpon>
     </Compile>

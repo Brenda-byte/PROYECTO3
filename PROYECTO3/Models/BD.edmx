@@ -4,49 +4,81 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="CRUDModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="CRUDModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Carros">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="100" />
+          <Property Name="Modelo" Type="varchar" MaxLength="50" />
+          <Property Name="Color" Type="varchar" MaxLength="50" />
+          <Property Name="precio" Type="int" />
+        </EntityType>
         <EntityType Name="Tabla">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="int" Nullable="false" />
-          <Property Name="nombre" Type="varchar" MaxLength="100" />
-          <Property Name="correo" Type="varchar" MaxLength="100" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="50" />
+          <Property Name="correo" Type="varchar" MaxLength="50" />
           <Property Name="fecha_nacimiento" Type="datetime" />
         </EntityType>
         <EntityContainer Name="CRUDModelStoreContainer">
+          <EntitySet Name="Carros" EntityType="Self.Carros" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tabla" EntityType="Self.Tabla" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CRUDModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="CRUDEntities4" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Carros" EntityType="CRUDModel.Carro" />
+          <EntitySet Name="Tablas" EntityType="CRUDModel.Tabla" />
+        </EntityContainer>
+        <EntityType Name="Carro">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Modelo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Color" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="precio" Type="Int32" />
+        </EntityType>
         <EntityType Name="Tabla">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="correo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="correo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="fecha_nacimiento" Type="DateTime" Precision="3" />
         </EntityType>
-        <EntityContainer Name="CRUDEntities4" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Tablas" EntityType="Self.Tabla" />
-        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="CRUDModelStoreContainer" CdmEntityContainer="CRUDEntities4">
+          <EntitySetMapping Name="Carros">
+            <EntityTypeMapping TypeName="CRUDModel.Carro">
+              <MappingFragment StoreEntitySet="Carros">
+                <ScalarProperty Name="precio" ColumnName="precio" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="Modelo" ColumnName="Modelo" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Tablas">
             <EntityTypeMapping TypeName="CRUDModel.Tabla">
               <MappingFragment StoreEntitySet="Tabla">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="nombre" ColumnName="nombre" />
-                <ScalarProperty Name="correo" ColumnName="correo" />
                 <ScalarProperty Name="fecha_nacimiento" ColumnName="fecha_nacimiento" />
+                <ScalarProperty Name="correo" ColumnName="correo" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

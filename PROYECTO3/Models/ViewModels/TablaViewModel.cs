@@ -20,6 +20,7 @@ namespace PROYECTO3.Models.ViewModels
         [Required]
         [DataType(DataType.Date)]
         [Display(Name = "Fecha de nacimiento")]
-        public DateTime? Fecha_nacimiento { get; set; }
+        [DisplayFormat(DataFormatString = "(0:yyyy:mm:dd)",ApplyFormatInEditMode =true)]
+        public DateTime? fecha_nacimiento { get; set; }
     }
 }

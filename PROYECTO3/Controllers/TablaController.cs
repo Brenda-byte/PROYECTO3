@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 using PROYECTO3.Models;
 using PROYECTO3.Models.ViewModels;
 using Serilog; // Asegúrate de agregar el paquete y configurarlo
@@ -12,10 +13,10 @@ namespace PROYECTO3.Controllers
     {
         private readonly CRUDEntities4 _db;
 
-        // Constructor
+        // Constructor con inyección de dependencias (mejor práctica)
         public TablaController()
         {
-            _db = new CRUDEntities4(); // O usa la inyección de dependencias aquí
+            _db = new CRUDEntities4();
         }
 
         // GET: Tabla
@@ -50,23 +51,22 @@ namespace PROYECTO3.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    using (_db)
+                    using (CRUDEntities4 db = new CRUDEntities4())
                     {
-                        var oTabla = new Tabla
-                        {
-                            correo = model.correo,
-                            fecha_nacimiento = model.Fecha_nacimiento, // Asegúrate de que el nombre del campo coincide
-                            nombre = model.nombre
-                        };
+                        var oTabla = new Tabla();
+                        oTabla.correo = model.correo;
+                        oTabla.fecha_nacimiento = model.fecha_nacimiento;
+                        oTabla.nombre = model.nombre;
 
-                        _db.Tablas.Add(oTabla);
-                        _db.SaveChanges();
+                        db.Tablas.Add(oTabla);
+                        db.SaveChanges();
                     }
-                    return RedirectToAction("Index"); // Redirige a la acción Index
+
+                    return Redirect("~/Tabla/Index");
                 }
 
-                // Si el modelo no es válido, regresa la vista con el modelo para mostrar los errores
                 return View(model);
+
             }
             catch (Exception ex)
             {
@@ -74,7 +74,7 @@ namespace PROYECTO3.Controllers
                 Log.Error(ex, "Error al guardar el nuevo registro.");
 
                 // Mostrar un mensaje genérico al usuario
-                ViewBag.ErrorMessage = "Ocurrió un error inesperado. Por favor, inténtelo de nuevo más tarde.";
+                ViewBag.ErrorMessage = "Ocurrió un error inesperado. Por favor, inténtelo de nuevo más tarde." + "\n"+ ex.Message;
 
                 // Devolver la vista con el modelo
                 return View(model);
@@ -97,7 +97,7 @@ namespace PROYECTO3.Controllers
                 {
                     nombre = oTabla.nombre,
                     correo = oTabla.correo,
-                    Fecha_nacimiento = oTabla.fecha_nacimiento, // Asegúrate de que el nombre del campo coincide
+                    fecha_nacimiento = oTabla.fecha_nacimiento,
                     id = oTabla.id
                 };
             }
@@ -114,15 +114,14 @@ namespace PROYECTO3.Controllers
                 {
                     using (_db)
                     {
-                        var oTabla = _db.Tablas.Find(model.id); // Buscar el registro existente
+                        var oTabla = _db.Tablas.Find(model.id);
                         if (oTabla == null)
                         {
                             return HttpNotFound("Registro no encontrado.");
                         }
 
-                        // Actualizar las propiedades del registro existente
                         oTabla.correo = model.correo;
-                        oTabla.fecha_nacimiento = model.Fecha_nacimiento; // Asegúrate de que el nombre del campo coincide
+                        oTabla.fecha_nacimiento = model.fecha_nacimiento;
                         oTabla.nombre = model.nombre;
 
                         _db.Entry(oTabla).State = System.Data.Entity.EntityState.Modified;
@@ -145,6 +144,36 @@ namespace PROYECTO3.Controllers
                 // Devolver la vista con el modelo
                 return View(model);
             }
+        }
+
+        // GET: Tabla/Eliminar/5
+        [HttpGet]
+        public ActionResult Eliminar(int id)
+        {
+            try
+            {
+                using (_db)
+                {
+                    var oTabla = _db.Tablas.Find(id);
+                    if (oTabla == null)
+                    {
+                        return HttpNotFound("Registro no encontrado.");
+                    }
+
+                    _db.Tablas.Remove(oTabla);
+                    _db.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Registrar el error
+                Log.Error(ex, "Error al eliminar el registro.");
+
+                // Mostrar un mensaje genérico al usuario
+                ViewBag.ErrorMessage = "Ocurrió un error inesperado. Por favor, inténtelo de nuevo más tarde.";
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }

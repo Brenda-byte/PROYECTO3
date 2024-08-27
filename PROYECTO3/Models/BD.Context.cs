@@ -25,7 +25,7 @@ namespace PROYECTO3.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Carro> Carros { get; set; }
         public virtual DbSet<Tabla> Tablas { get; set; }
-        public object Tabla { get; internal set; }
     }
 }
